@@ -11,21 +11,28 @@ export class App implements OnInit {
 
   private apiService = inject(ApiService);
 
-  loading = true;
   health: HealthResponse | null = null;
+  loading = false;
   error: string | null = null;
 
-  ngOnInit(): void {
-    this.apiService.getHealth().subscribe({
-      next: (response) => {
-        this.health = response;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = 'No se ha podido conectar con la API';
-        this.loading = false;
-        console.error(err);
-      }
-    });
+  async ngOnInit(): Promise<void> {
+    await this.checkApi();
+  }
+
+  async checkApi(): Promise<void> {
+
+    this.loading = true;
+    this.error = null;
+
+    try {
+      this.health = await this.apiService.getHealth();
+
+    } catch (err) {
+      console.error('Error conectando con la API:', err);
+      this.error = 'No se ha podido conectar con el servidor';
+
+    } finally {
+      this.loading = false;
+    }
   }
 }
