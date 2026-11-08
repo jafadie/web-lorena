@@ -1,0 +1,17 @@
+<main>
+      <h1>Estado de la aplicación</h1>
+
+      @if (loading) {
+        <p>Comprobando conexión con el backend...</p>
+      }
+
+      @if (health) {
+        <p>Estado: {{ health.status }}</p>
+        <p>{{ health.message }}</p>
+        <p>Fecha: {{ health.timestamp }}</p>
+      }
+
+      @if (error) {
+        <p>Error al conectar con el backend: {{ error }}</p>
+      }
+    </main>
